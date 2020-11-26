@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Список стран</title>
+</head>
+<body>
+
+<h1>Список стран</h1>
+
+<table>
+
+{% for c in countrylist %}
+     <tr>
+    <td>{{c.name}}</td>
+     <td>
+        <a href="/geo/country/{{c.id}}/delete">удалить</a>
+     </td>
+     </tr>
+
+{% endfor %}
+
+</table>
+
+
+</body>
+</html>
