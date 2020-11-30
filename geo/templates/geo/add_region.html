@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Список стран</title>
+</head>
+<body>
+
+<h1>Добавить регион</h1>
+
+<table>
+
+{% for r in regionlist %}
+     <tr>
+    <td>{{r.name}}</td>
+     <td>
+        <a href="{% url 'region.delete' r.id %}">удалить</a>
+     </td>
+
+     </tr>
+
+{% endfor %}
+
+</table>
+
+
+<form method="post" action="{% url 'country.create_region' id %}">
+    {% csrf_token %}
+    <p><label for="id_name">Name:</label>
+        <input type="text" name="name" maxlength="100" required="" id="id_name">
+    </p>
+
+
+    <button type="submit">Отправить</button>
+</form>
+
+
+
+</body>
+</html>
