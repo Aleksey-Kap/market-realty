@@ -10,7 +10,7 @@ class Country(models.Model):
 class Region(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, on_delete=models.RESTRICT)
-    #parent = models.ForeignKey(self)
+    pid = models.ForeignKey('self', null=True, related_name='parent', on_delete=models.RESTRICT)
 
 
 class City(models.Model):
