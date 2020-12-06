@@ -8,7 +8,7 @@
 
 <h1>Добавить город</h1>
 
-<h2> Регион  </h2>
+<h2> Регион   </h2>
 
 
 {% for c in citylist %}
@@ -17,7 +17,7 @@
     <td>{{c.name}}</td>
      <td>
          <a href="{% url 'city.delete' c.id %}">удалить</a> &nbsp;&nbsp;&nbsp;
-<!--         <a href="{% url 'region.add_city' c.id %}">добавить город</a>-->
+         <a href="{% url 'city.add_district' c.id %}">добавить район города</a>
 
      </td>
 
@@ -29,6 +29,7 @@
     <td> &nbsp;&nbsp;&nbsp;&nbsp;{{cc.name}}</td>
      <td>
          <a href="{% url 'city.delete' c.id %}">удалить</a>
+         <a href="{% url 'city.add_district' c.id %}">добавить район города</a>
      </td>
 
      </tr>

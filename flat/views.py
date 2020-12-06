@@ -12,5 +12,5 @@ def index(request):
 
 
 def card(request, id):
-    context = {'id' : id}
+    context = {'id': id}
     return render(request, 'flat/card.html', context)

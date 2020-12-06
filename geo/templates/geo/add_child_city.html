@@ -14,7 +14,8 @@
      <tr>
     <td>{{c.name}}</td>
      <td>
-        <a href="{% url 'city.delete' r.id %}">удалить</a>  &nbsp;&nbsp;&nbsp;
+        <a href="{% url 'city.delete' c.id %}">удалить</a>
+          <a href="{% url 'city.add_district' c.id %}">добавить район города</a>&nbsp;&nbsp;&nbsp;
      </td>
 
      </tr>

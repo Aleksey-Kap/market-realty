@@ -10,11 +10,11 @@
 
 <table>
 
-{% for r in regionlist %}
+{% for d in districtlist %}
      <tr>
-    <td>{{r.name}}</td>
+    <td>{{d.name}}</td>
      <td>
-        <a href="{% url 'district.delete' r.id %}">удалить</a>
+        <a href="{% url 'district.delete' d.id %}">удалить</a>
      </td>
 
      </tr>
@@ -24,7 +24,7 @@
 </table>
 
 
-<form method="post" action="{% url 'region.create_district' id %}">
+<form method="post" action="{% url 'city.create_district' id %}">
     {% csrf_token %}
     <p><label for="id_name">Name:</label>
         <input type="text" name="name" maxlength="100" required="" id="id_name">

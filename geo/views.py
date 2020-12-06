@@ -139,3 +139,29 @@ def create_child_city(request, id):
         r.name = request.POST['name']
         r.save()
     return redirect('/geo/city/' + str(id) + '/add_child')
+
+
+def add_district(request, id):
+    districtlist = District.objects.all()
+    context = {
+        'id': id,
+        'districtlist': districtlist
+    }
+    return render(request, 'geo/add_district.html', context)
+
+
+def create_district(request, id):
+    if request.method == 'POST':
+        c = City.objects.get(pk=id)
+        r = District()
+        r.city_id = id
+        r.name = request.POST['name']
+        r.save()
+    return redirect('/geo/city/' + str(id) + '/add_district')
+
+
+def district_delete(request, id):
+    r = District.objects.get(pk=id)
+    cid = r.city_id
+    r.delete()
+    return redirect('/geo/region/'+str(cid)+'/add_district')
