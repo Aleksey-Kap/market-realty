@@ -6,16 +6,15 @@
 </head>
 <body>
 
-<h1>Добавить подрегион</h1>
+<h1>Добавить город</h1>
 
 <table>
 
-{% for r in regionlist %}
+{% for c in citylist %}
      <tr>
-    <td>{{r.name}}</td>
+    <td>{{c.name}}</td>
      <td>
-        <a href="{% url 'region.delete' r.id %}">удалить</a>  &nbsp;&nbsp;&nbsp;
-         <a href="{% url 'region.add_city' r.id %}">добавить город</a>
+        <a href="{% url 'city.delete' r.id %}">удалить</a>  &nbsp;&nbsp;&nbsp;
      </td>
 
      </tr>
@@ -25,7 +24,7 @@
 </table>
 
 
-<form method="post" action="{% url 'region.create_child' id %}">
+<form method="post" action="{% url 'city.create_child' id %}">
     {% csrf_token %}
     <p><label for="id_name">Name:</label>
         <input type="text" name="name" maxlength="100" required="" id="id_name">

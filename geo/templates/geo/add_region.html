@@ -14,17 +14,21 @@
      <tr>
     <td>{{r.name}}</td>
      <td>
-         <a href="{% url 'region.add_child' r.id %}">добавить под регион</a>
-        <a href="{% url 'region.delete' r.id %}">удалить</a>
+         <a href="{% url 'region.delete' r.id %}">удалить</a> &nbsp;&nbsp;&nbsp;
+         <a href="{% url 'region.add_child' r.id %}">добавить под регион (город и область)</a>  &nbsp;&nbsp;&nbsp;
+         <a href="{% url 'region.add_city' r.id %}">добавить город</a>
+
      </td>
 
      </tr>
 {% if r.id in regionlistchildren %}
-    {% for rr in regionlistchildren.get(r.id) %}
+    {% for rr in regionlistchildren %}
     <tr>
     <td> &nbsp;&nbsp;&nbsp;&nbsp;{{rr.name}}</td>
      <td>
          <a href="{% url 'region.delete' r.id %}">удалить</a>
+         <a href="{% url 'region.add_child' r.id %}">добавить под регион (город и область)</a>  &nbsp;&nbsp;&nbsp;
+         <a href="{% url 'region.add_city' r.id %}">добавить город</a>
      </td>
 
      </tr>

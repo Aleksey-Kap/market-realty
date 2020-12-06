@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from flat.models import Country, Region
+from flat.models import Country, Region, District, City
 from .forms import CountryForm
 
 # Create your views here.
@@ -82,4 +82,60 @@ def create_child_region(request, id):
         r.country_id = r2.country_id
         r.name = request.POST['name']
         r.save()
-    return redirect('/geo/country/' + str(id) + '/add_region')
+    return redirect('/geo/region/' + str(id) + '/add_child')
+
+
+def add_city(request, id):
+    citylistitems = City.objects.filter(region_id=id)
+    citylist = []
+    citylistchildren = {}
+    for r in citylistitems:
+        if r.pid:
+            if r.pid not in citylistchildren:
+                citylistchildren[r.pid] = []
+            citylistchildren[r.pid].append(r)
+        else:
+            citylist.append(r)
+    context = {
+        'id': id,
+        'citylist': citylist,
+        'citylistchildren': citylistchildren
+    }
+    return render(request, 'geo/add_city.html', context)
+
+
+def create_city(request, id):
+    if request.method == 'POST':
+        c = Region.objects.get(pk=id)
+        r = City()
+        r.region_id = id
+        r.name = request.POST['name']
+        r.save()
+    return redirect('/geo/region/'+str(id)+'/add_city')
+
+
+def city_delete(request, id):
+    r = City.objects.get(pk=id)
+    cid = r.region_id
+    r.delete()
+    return redirect('/geo/region/'+str(cid)+'/add_city')
+
+
+def add_child_city(request, id):
+    citylist = City.objects.filter(pid=id)
+    context = {
+        'id': id,
+        'citylist': citylist
+    }
+    return render(request, 'geo/add_child_city.html', context)
+
+
+def create_child_city(request, id):
+    if request.method == 'POST':
+        r2 = City.objects.get(pk=id)
+        r = City()
+        r.pid = r2
+        r.region_id = r2.region_id
+        r.name = request.POST['name']
+        r.save()
+    return redirect('/geo/city/' + str(id) + '/add_child')

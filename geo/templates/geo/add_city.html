@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Список стран</title>
+</head>
+<body>
+
+<h1>Добавить город</h1>
+
+<h2> Регион  </h2>
+
+
+{% for c in citylist %}
+<table>
+     <tr>
+    <td>{{c.name}}</td>
+     <td>
+         <a href="{% url 'city.delete' c.id %}">удалить</a> &nbsp;&nbsp;&nbsp;
+<!--         <a href="{% url 'region.add_city' c.id %}">добавить город</a>-->
+
+     </td>
+
+     </tr>
+
+{% if c.id in citylistchildren %}
+    {% for cc in citylistchildren %}
+    <tr>
+    <td> &nbsp;&nbsp;&nbsp;&nbsp;{{cc.name}}</td>
+     <td>
+         <a href="{% url 'city.delete' c.id %}">удалить</a>
+     </td>
+
+     </tr>
+    {% endfor %}
+{% endif %}
+
+</table>
+{% endfor %}
+
+<form method="post" action="{% url 'region.create_city' id %}">
+    {% csrf_token %}
+    <p><label for="id_name">Name:</label>
+        <input type="text" name="name" maxlength="100" required="" id="id_name">
+    </p>
+
+
+    <button type="submit">Отправить</button>
+</form>
+
+
+
+</body>
+</html>
