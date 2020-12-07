@@ -138,3 +138,11 @@ class FlatmetroAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Flatmetro, FlatmetroAdmin)
+
+
+class FlatimgesAdmin(admin.ModelAdmin):
+    list_display = ('flat', 'pik')
+    list_display_links = ('flat', 'pik')
+
+
+admin.site.register(Flatimges, FlatimgesAdmin)

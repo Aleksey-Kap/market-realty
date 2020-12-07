@@ -1,11 +1,6 @@
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
+{% extends 'layout.html' %}
+{% block title %} Список квартир {% endblock %}
+{% block content %}
 Эта главная страница
 
 <ul>
@@ -15,5 +10,5 @@
 </ul>
 
 <a href="/geo">Список стран</a>
-</body>
-</html>
+
+{% endblock %}

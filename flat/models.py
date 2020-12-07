@@ -19,7 +19,7 @@ class Country(models.Model):
 class Region(models.Model):
     name = models.CharField(max_length=100)
     country = models.ForeignKey(Country, on_delete=models.RESTRICT)
-    pid = models.ForeignKey('self', null=True, related_name='parent', on_delete=models.RESTRICT)
+    pid = models.ForeignKey('self', null=True, blank=True, related_name='parent', on_delete=models.RESTRICT)
 
     def __str__(self):
         return self.name
@@ -33,7 +33,7 @@ class Region(models.Model):
 class City(models.Model):
     name = models.CharField(max_length=100)
     region = models.ForeignKey(Region, on_delete=models.RESTRICT)
-    pid = models.ForeignKey('self', null=True, related_name='parent', on_delete=models.RESTRICT)
+    pid = models.ForeignKey('self', null=True, blank=True, related_name='parent', on_delete=models.RESTRICT)
 
 
     def __str__(self):
@@ -226,6 +226,11 @@ class Flat(models.Model):
     sallertype = models.ForeignKey(Sallertype, on_delete=models.RESTRICT, verbose_name='Тип продавца')
     text = models.TextField(verbose_name='Текст объявления')
     price = models.IntegerField(verbose_name='Цена')
+    address = models.CharField(max_length=200, verbose_name='адрес')
+    coord_lat = models.CharField(max_length=100, verbose_name='широта')
+    coord_long = models.CharField(max_length=100, verbose_name='долгота')
+
+
 
     class Meta:
         verbose_name_plural = 'Квартиры'
@@ -245,6 +250,22 @@ class Flatmetro(models.Model):
         verbose_name_plural = 'Тип метро-квартиры (для выборки)'
         verbose_name = 'Тип метро-квартиры (для выборки)'
 
+
+def flat_upload_path(instance, filename):
+    return 'flats/flat_{0}'.format(instance.id)
+
+
+class Flatimges (models.Model):
+    flat = models.ForeignKey(Flat, on_delete=models.RESTRICT)
+    pik = models.FileField(upload_to=flat_upload_path)
+
+    def __str__(self):
+        return self.name
+
+
+    class Meta:
+        verbose_name_plural = 'Тип фото (для выборки)'
+        verbose_name = 'Тип фото (для выборки)'
 
 
 

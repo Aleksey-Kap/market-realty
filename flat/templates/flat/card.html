@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'layout.html' %}
+{% block title %} Объявление {{id}} {% endblock %}
+{% block content %}
+
 <h1>Объявление № {{id}}</h1>
 <a href="/flat/"> список объявлений</a>
-</body>
-</html>
+
+
+{% endblock %}
