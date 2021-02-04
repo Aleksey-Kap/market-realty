@@ -142,7 +142,7 @@ def create_child_city(request, id):
 
 
 def add_district(request, id):
-    districtlist = District.objects.all()
+    districtlist = District.objects.filter(city_id=id)
     context = {
         'id': id,
         'districtlist': districtlist

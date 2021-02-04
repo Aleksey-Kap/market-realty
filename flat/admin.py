@@ -2,11 +2,21 @@ from django.contrib import admin
 from .models import *
 
 # Register your models here.
+class GalleryInline(admin.TabularInline):
+    fk_name = 'flat'
+    model = Flatimges
 
+
+# @admin.register(Flat)
 class FlatAdmin(admin.ModelAdmin):
-    list_display = ('roomtype', 'city')
+    list_display = ('roomtype', 'city', 'isdayly', 'isrent', 'issale',)
     list_display_links = ('roomtype', 'city')
     search_fields = ('roomtype', 'city')
+    inlines = [GalleryInline, ]
+
+
+
+
 
 
 admin.site.register(Flat, FlatAdmin,)
@@ -125,8 +135,8 @@ admin.site.register(Mertoline, MertolineAdmin)
 
 
 class MetroAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    list_display_links = ('name',)
+    list_display = ('name', 'metroline')
+    list_display_links = ('name','metroline')
 
 
 admin.site.register(Metro, MetroAdmin)
@@ -145,4 +155,44 @@ class FlatimgesAdmin(admin.ModelAdmin):
     list_display_links = ('flat', 'pik')
 
 
-admin.site.register(Flatimges, FlatimgesAdmin)
+admin.site.register(Flatimges, FlatimgesAdmin, )
+
+
+class WctypeAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_display_links = ('name',)
+
+
+admin.site.register(Wctype, WctypeAdmin)
+
+class BalconyAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_display_links = ('name',)
+
+
+admin.site.register(Balcony, BalconyAdmin)
+
+
+class LoggiaAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_display_links = ('name',)
+
+
+admin.site.register(Loggia, LoggiaAdmin)
+
+
+class FloortypeAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_display_links = ('name',)
+
+
+admin.site.register(Floortype, FloortypeAdmin)
+
+
+class HeatingAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_display_links = ('name',)
+
+
+admin.site.register(Heating, HeatingAdmin)
+

@@ -1,14 +1,818 @@
 {% extends 'layout.html' %}
+{% load static %}
+{% load dictkey %}
 {% block title %} Список квартир {% endblock %}
 {% block content %}
-Эта главная страница
+<!--Эта главная страница-->
 
-<ul>
-{% for i in flatlist %}
-    <li><a href="/flat/{{i}}"> объявление № {{i}} </a></li>
-    {% endfor %}
-</ul>
+<!--<ul>-->
+<!--{% for f in flatlist %}-->
+<!--    <li><a href="/flat/{{f.id}}"> объявление № {{f.roomtype}} {{f.sqtotal}} м<sup>2</sup> {{f.floor}}/ {{f.floortotal}} этаж</a></li>-->
+<!--    {% endfor %}-->
+<!--</ul>-->
 
-<a href="/geo">Список стран</a>
+<!--<a href="/geo">Список стран</a>-->
 
+
+<!-- Listing Grid View -->
+<section class="our-listing bgc-f7 pb30-991">
+		<div class="container">
+
+			<div class="row">
+				<div class="col-lg-6">
+					<div class="breadcrumb_content style2 mb0-991">
+						<ol class="breadcrumb">
+						    <li class="breadcrumb-item"><a href="#">Главная</a></li>
+						    <li class="breadcrumb-item active text-thm" aria-current="page">Продажа</li>
+						</ol>
+						<h2 class="breadcrumb_title">Продажа квартир</h2>
+					</div>
+				</div>
+				<div class="col-lg-6">
+					<div class="listing_list_style mb20-xsd tal-991">
+						<ul class="mb0">
+							<li class="list-inline-item"><a href="#"><span class="fa fa-th-large"></span></a></li>
+							<li class="list-inline-item"><a href="#"><span class="fa fa-th-list"></span></a></li>
+						</ul>
+					</div>
+					<div class="dn db-991 mt30 mb0">
+						<div id="main2">
+							<span id="open2" class="flaticon-filter-results-button filter_open_btn style2"> Show Filter</span>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-lg-4 col-xl-4">
+					<div class="sidebar_listing_grid1 dn-991">
+						<div class="sidebar_listing_list">
+							<div class="sidebar_advanced_search_widget">
+								<form method="post" action="{% url 'flat:search' %}" >
+									{% csrf_token %}
+								<ul class="sasw_list mb0">
+									<li class="search_area">
+									    <div class="form-group">
+									    	<input type="text" class="form-control" id="exampleInputName1" placeholder="Адрес или ЖК">
+									    	<label for="exampleInputEmail"><span class="flaticon-magnifying-glass"></span></label>
+									    </div>
+									</li>
+<!--									<li class="search_area">-->
+<!--									    <div class="form-group">-->
+<!--									    	<input type="text" class="form-control" id="exampleInputEmail" placeholder="Location">-->
+<!--									    	<label for="exampleInputEmail"><span class="flaticon-maps-and-flags"></span></label>-->
+<!--									    </div>-->
+<!--									</li>-->
+									<li>
+										<div class="search_option_two">
+											<div class="candidate_revew_select">
+												<select class="selectpicker w100 show-tick" name="operation_type">
+													{% with op=post|dictkey:'operation_type'|default_if_none:'' %}
+													{% if op == 'buy' %}
+													<option value="buy" selected>Купить</option>
+													{% else %)
+													<option value="buy">Купить</option>
+													{% endif %}
+
+													{% if op == 'rent_month' %}
+													<option value="rent_month" selected>Снять</option>
+													{% else %)
+													<option value="rent_month">Снять</option>
+													{% endif %}
+
+													{% if op == 'rent_day' %}
+													<option value="rent_day" selected>Посуточно</option>
+													{% else %)
+													<option value="rent_day">Посуточно</option>
+													{% endif %}
+													{% endwith %}
+												</select>
+
+											</div>
+										</div>
+									</li>
+									<li>
+										<div class="search_option_two">
+											<div class="candidate_revew_select">
+												<select class="selectpicker w100 show-tick">
+													<option><b>Квартира в новостройке</b></option>
+													<option><b>Квартира во вторичке</b></option>
+													<option>Комната</option>
+													<option>Койко-место</option>
+													<option>Дом</option>
+													<option>Часть дома</option>
+													<option>Таунхаус</option>
+												</select>
+											</div>
+										</div>
+									</li>
+
+									<p>Цена</p>
+									<li class="min_area list-inline-item">
+									    <div class="form-group">
+									    	<input type="text" name="price1" class="form-control" id="exampleInputName2" placeholder="От" value="{{ post|dictkey:'price1' }}">
+									    </div>
+									</li>
+									<li class="max_area list-inline-item">
+										<div class="form-group">
+									    	<input type="text" name="price2" class="form-control" id="exampleInputName3" placeholder="До" value="{{ post|dictkey:'price2' }}">
+									    </div>
+									</li>
+
+
+
+<!--									<li>-->
+<!--										<div class="small_dropdown2">-->
+<!--										    <div id="prncgs2" class="btn dd_btn">-->
+<!--										    	<span>Price</span>-->
+<!--										    	<label for="exampleInputEmail2"><span class="fa fa-angle-down"></span></label>-->
+<!--										    </div>-->
+<!--										  	<div class="dd_content2">-->
+<!--											    <div class="pricing_acontent">-->
+<!--													<input type="text" name="price1" class="amount" placeholder="1000">-->
+<!--													<input type="text" name="price2" class="amount2" placeholder="100000000">-->
+<!--													<div class="slider-range"></div>-->
+<!--											    </div>-->
+<!--										  	</div>-->
+<!--										</div>-->
+<!--									</li>-->
+									<p>Комнатность</p>
+									<li>
+										<div class="search_option_two">
+											<div class="candidate_revew_select">
+												<select class="selectpicker w100 show-tick" name="room_types[]" multiple>
+<!--													<option value="">Комнатность</option>-->
+													{% for rt in room_types %}
+													<option value="{{ rt.pk }}">{{ rt.name }}</option>
+													{% endfor %}
+
+												</select>
+											</div>
+										</div>
+									</li>
+<!--									<li>-->
+<!--										<div class="search_option_two">-->
+<!--											<div class="candidate_revew_select">-->
+<!--												<select name="bedrooms" class="selectpicker w100 show-tick">-->
+<!--													<option value="">Bedrooms</option>-->
+<!--													<option value="1">1</option>-->
+<!--													<option value="2">2</option>-->
+<!--													<option value="3">3</option>-->
+<!--													<option value="4">4</option>-->
+<!--													<option value="5">5</option>-->
+<!--													<option value="6">6</option>-->
+<!--												</select>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</li>-->
+<!--									<li>-->
+<!--										<div class="search_option_two">-->
+<!--											<div class="candidate_revew_select">-->
+<!--												<select class="selectpicker w100 show-tick">-->
+<!--													<option>Garages</option>-->
+<!--													<option>Yes</option>-->
+<!--													<option>No</option>-->
+<!--													<option>Others</option>-->
+<!--												</select>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</li>-->
+<!--									<li>-->
+<!--										<div class="search_option_two">-->
+<!--											<div class="candidate_revew_select">-->
+<!--												<select class="selectpicker w100 show-tick">-->
+<!--													<option>Year built</option>-->
+<!--													<option>2013</option>-->
+<!--													<option>2014</option>-->
+<!--													<option>2015</option>-->
+<!--													<option>2016</option>-->
+<!--													<option>2017</option>-->
+<!--													<option>2018</option>-->
+<!--													<option>2019</option>-->
+<!--													<option>2020</option>-->
+<!--												</select>-->
+<!--											</div>-->
+<!--										</div>-->
+<!--									</li>-->
+<!--									<li class="min_area list-inline-item">-->
+<!--									    <div class="form-group">-->
+<!--									    	<input type="text" class="form-control" id="exampleInputName2" placeholder="Min Area">-->
+<!--									    </div>-->
+<!--									</li>-->
+<!--									<li class="max_area list-inline-item">-->
+<!--									    <div class="form-group">-->
+<!--									    	<input type="text" class="form-control" id="exampleInputName3" placeholder="Max Area">-->
+<!--									    </div>-->
+<!--									</li>-->
+									<div class="panel">
+									<li class="list-inline-item list_s "><a href="#" class="btn " data-toggle="modal" data-target=".bd-example-modal-lg1"> <span class="dn-lg"><b>Еще фильтры</b></span></a></li>
+									</div>
+									<br>
+									<!-- Modal -->
+									<div class="sign_up_modal modal fade bd-example-modal-lg1" tabindex="-1" role="dialog" aria-hidden="true">
+										<div class="modal-dialog modal-lg" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+												</div>
+												<div class="modal-body container pb20">
+													<h4>Ещё фильтры</h4>
+													<hr>
+
+									<div class="row" style="overflow-y: auto; max-height: 50vh;">
+										<ul class="col-3" style="line-height: 3em; text-align: right; ">
+
+											<li><p><b>Тип сделки</b></p></li>
+											<li><p><b>Площадь, м<sup>2</sup></b></p></li>
+											<li><p><b>Планировка</b></p></li>
+											<li><p><b>Санузел :</b></p></li>
+											<li<p><b>Балкон/Лоджия :</b></p></li>
+											<li><p><b>Ремонт :</b></p></li>
+											<li><p><b>Этаж :</b></p></li>
+											<li><p><b>Этажей в доме :</b></p></li>
+											<li><p><b>Вид из окна :</b></p></li>
+											<li><p><b>Год постройки :</b></p></li>
+											<li style="line-height:100px"><p><b>Тип дома :</b></p></li>
+											<li><p><b>Лифт :</b></p></li>
+										</ul>
+										<ul class="col-9" style="line-height:3em;">
+											<li>
+												<div class="custom-checkbox ui_kit_checkbox selectable-list" style="margin-left:25px;">
+													<input type="checkbox" class="custom-control-input" id="customCheck116" name="owner" value="1">
+													<label class="custom-control-label" for="customCheck116">  От собственника</label>
+												</div>
+
+
+
+											</li>
+
+											<li><p><span ><div style="display:flex;">Общая &nbsp;&nbsp;<input type="text" name="sqtotal1" class="form-control" placeholder="от" style="height:35px; width:50px"><input type="text" name="sqtotal2" class="form-control" placeholder="до" style="height:35px; width:50px">
+											&nbsp;&nbsp; Кухня &nbsp;&nbsp;<input type="text" name="sqkitchen1" class="form-control" placeholder="от" style="height:35px; width:50px"><input type="text" name="sqkitchen2" class="form-control" placeholder="до" style="height:35px; width:50px">
+												&nbsp;&nbsp; </div></span></p></a></li>
+											<li><p><span >
+
+
+												{% for fp in free_plan %}
+													<input type="radio"  name="free_plan" aria-hidden="true" id="freeplan{{ fp.pk }}" style="position:absolute; clip:rect(0,0,0,0);" value="{{ fp.pk }}" >
+													<label class="btn  btn-thm freeplanradiolabel" data-value='{{ fp.pk }}' for="freeplan{{ fp.pk }}" >
+													<span>{{ fp.name }}</span>
+													</label>
+
+												{% endfor %}
+
+
+
+
+											</span></p>
+
+											</li>
+											<li><p><span>
+
+												{% for wt in wc_type %}
+												<input type="radio"  name="wc_type" aria-hidden="true" id="wctype{{ wt.pk }}" style="position:absolute; clip:rect(0,0,0,0);" value="{{ wt.pk }}" >
+													<label class="btn  btn-thm freeplanradiolabel" data-value='{{ wt.pk }}' for="wctype{{ wt.pk }}" >
+													<span>{{ wt.name }}</span>
+													</label>
+
+												{% endfor %}
+											</span></p></a></li>
+
+											<li><p><span>
+												{% for bt in balcony_type %}
+												<input type="radio"  name="balcony_type " aria-hidden="true" id="balconytype {{ bt.pk }}" style="position:absolute; clip:rect(0,0,0,0);" value="{{ bt.pk }}" >
+													<label class="btn  btn-thm freeplanradiolabel" data-value='{{ bt.pk }}' for="balconytype {{ bt.pk }}" >
+													<span>{{ bt.name }}</span>
+													</label>
+
+												{% endfor %}
+											</span></p></a></li>
+
+											<li><p><span>
+												{% for rt in repair_type %}
+												<input type="radio"  name="repair_type" aria-hidden="true" id="repairtype{{ rt.pk }}" style="position:absolute; clip:rect(0,0,0,0);" value="{{ rt.pk }}" >
+													<label class="btn  btn-thm freeplanradiolabel" data-value='{{ rt.pk }}' for="repairtype{{ rt.pk }}" >
+													<span>{{ rt.name }}</span>
+													</label>
+
+												{% endfor %}
+											</span></p></a></li>
+
+											<li><p><span ><div style="display:flex;"><input type="text" name="floor1" class="form-control" placeholder="от" style="height:35px; width:50px"><input type="text" name="floor2" class="form-control" placeholder="до" style="height:35px; width:50px">
+											&nbsp;&nbsp;
+												&nbsp;&nbsp; </div></span></p></a></li>
+
+											<li><p><span ><div style="display:flex;"><input type="text" name="floortotal1" class="form-control" placeholder="от" style="height:35px; width:50px"><input type="text" name="floortotal2" class="form-control" placeholder="до" style="height:35px; width:50px">
+											&nbsp;&nbsp;
+												&nbsp;&nbsp; </div></span></p></a></li>
+
+
+											<li><p><span>
+												{% for wv in windows_view %}
+												<input type="radio"  name="windows_view" aria-hidden="true" id="windowsview{{ wv.pk }}" style="position:absolute; clip:rect(0,0,0,0);" value="{{ wv.pk }}" >
+													<label class="btn  btn-thm freeplanradiolabel" data-value='{{ wv.pk }}' for="windowsview{{ wv.pk }}" >
+													<span>{{ wv.name }}</span>
+													</label>
+
+												{% endfor %}
+											</span></p></a></li>
+
+											<li><p><span ><div style="display:flex;"><input type="text" name="year1" class="form-control" placeholder="от" style="height:35px; width:70px"><input type="text" name="year2" class="form-control" placeholder="до" style="height:35px; width:70px">
+											&nbsp;&nbsp;
+												&nbsp;&nbsp; </div></span></p></a></li>
+
+
+											<li ><p><span>
+												{% for ht in house_type %}
+												<input type="radio"  name="house_type" aria-hidden="true" id="housetype{{ ht.pk }}" style="position:absolute; clip:rect(0,0,0,0);" value="{{ ht.pk }}" >
+													<label class="btn  btn-thm freeplanradiolabel" data-value='{{ ht.pk }}' for="housetype{{ ht.pk }}" >
+													<span>{{ ht.name }}</span>
+													</label>
+
+												{% endfor %}
+											</span></p></a></li>
+
+											<li ><p><span>
+												{% for lt in lift_type %}
+												<input type="radio"  name="lift_type" aria-hidden="true" id="lifttype{{ lt.pk }}" style="position:absolute; clip:rect(0,0,0,0);" value="{{ lt.pk }}" >
+													<label class="btn  btn-thm freeplanradiolabel" data-value='{{ lt.pk }}' for="lifttype{{ lt.pk }}" >
+													<span>{{ lt.name }}</span>
+													</label>
+
+												{% endfor %}
+											</span></p></a></li>
+
+
+										</ul>
+
+
+
+
+									</div>
+										<hr>
+										<ul>
+											<li>
+												
+										<div class="search_option_button">
+										    <button type="radio" class="btn btn-block btn-thm" style="width:250px; margin: 0 0 0 auto;">Показать объекты</button>
+										</div>
+									</li>
+										</ul>
+
+												</div>
+											</div>
+										</div>
+									</div>
+
+
+
+
+
+
+
+<!--									<li>-->
+<!--									  	<div id="accordion" class="panel-group">-->
+<!--										    <div class="panel">-->
+<!--										      	<div class="panel-heading">-->
+<!--											      	<h4 class="panel-title">-->
+<!--											        	<a href="#panelBodyRating" class="accordion-toggle link" data-toggle="collapse" data-parent="#accordion"><i class="flaticon-more"></i> Ещё фильтры</a>-->
+<!--											        </h4>-->
+<!--										      	</div>-->
+<!--											    <div id="panelBodyRating" class="panel-collapse collapse">-->
+<!--											        <div class="panel-body row">-->
+<!--											      		<div class="col-lg-12">-->
+<!--											                <ul class="ui_kit_checkbox selectable-list float-left fn-400">-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck16">-->
+<!--																		<label class="custom-control-label" for="customCheck16">Air Conditioning</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck17">-->
+<!--																		<label class="custom-control-label" for="customCheck17">Barbeque</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck18">-->
+<!--																		<label class="custom-control-label" for="customCheck18">Gym</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck19">-->
+<!--																		<label class="custom-control-label" for="customCheck19">Microwave</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck20">-->
+<!--																		<label class="custom-control-label" for="customCheck20">TV Cable</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck21">-->
+<!--																		<label class="custom-control-label" for="customCheck21">Lawn</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck22">-->
+<!--																		<label class="custom-control-label" for="customCheck22">Refrigerator</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck23">-->
+<!--																		<label class="custom-control-label" for="customCheck23">Swimming Pool</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                </ul>-->
+<!--											                <ul class="ui_kit_checkbox selectable-list float-right fn-400">-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck24">-->
+<!--																		<label class="custom-control-label" for="customCheck24">WiFi</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck25">-->
+<!--																		<label class="custom-control-label" for="customCheck25">Sauna</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck26">-->
+<!--																		<label class="custom-control-label" for="customCheck26">Dryer</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck27">-->
+<!--																		<label class="custom-control-label" for="customCheck27">Washer</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck28">-->
+<!--																		<label class="custom-control-label" for="customCheck28">Laundry</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck29">-->
+<!--																		<label class="custom-control-label" for="customCheck29">Outdoor Shower</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                	<li>-->
+<!--																	<div class="custom-control custom-checkbox">-->
+<!--																		<input type="checkbox" class="custom-control-input" id="customCheck30">-->
+<!--																		<label class="custom-control-label" for="customCheck30">Window Coverings</label>-->
+<!--																	</div>-->
+<!--											                	</li>-->
+<!--											                </ul>-->
+<!--												        </div>-->
+<!--											        </div>-->
+<!--											    </div>-->
+<!--										    </div>-->
+<!--										</div>-->
+<!--									</li>-->
+									<li>
+										<div class="search_option_button">
+										    <button type="submit" class="btn btn-block btn-thm">Найти</button>
+										</div>
+									</li>
+								</ul>
+									</form>
+							</div>
+						</div>
+
+
+						<div class="terms_condition_widget">
+							<h4 class="title">Рекомендуемы объекты</h4>
+							<div class="sidebar_feature_property_slider">
+								<div class="item">
+									<div class="feat_property home7">
+										<div class="thumb">
+											<img class="img-whp" src='{% static "images/property/fp1.jpg" %}' alt="fp1.jpg">
+											<div class="thmb_cntnt">
+												<ul class="tag mb0">
+													<li class="list-inline-item"><a href="#">For Rent</a></li>
+													<li class="list-inline-item"><a href="#">Featured</a></li>
+												</ul>
+												<a class="fp_price" href="#">$13,000<small>/mo</small></a>
+												<h4 class="posr color-white">Renovated Apartment</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="item">
+									<div class="feat_property home7">
+										<div class="thumb">
+											<img class="img-whp" src='{% static "images/property/fp2.jpg" %}' alt="fp2.jpg">
+											<div class="thmb_cntnt">
+												<ul class="tag mb0">
+													<li class="list-inline-item"><a href="#">For Rent</a></li>
+													<li class="list-inline-item"><a href="#">Featured</a></li>
+												</ul>
+												<a class="fp_price" href="#">$13,000<small>/mo</small></a>
+												<h4 class="posr color-white">Renovated Apartment</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="item">
+									<div class="feat_property home7">
+										<div class="thumb">
+											<img class="img-whp" src='{% static "images/property/fp3.jpg" %}' alt="fp3.jpg">
+											<div class="thmb_cntnt">
+												<ul class="tag mb0">
+													<li class="list-inline-item"><a href="#">For Rent</a></li>
+													<li class="list-inline-item"><a href="#">Featured</a></li>
+												</ul>
+												<a class="fp_price" href="#">$13,000<small>/mo</small></a>
+												<h4 class="posr color-white">Renovated Apartment</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="item">
+									<div class="feat_property home7">
+										<div class="thumb">
+											<img class="img-whp" src='{% static "images/property/fp4.jpg" %}' alt="fp4.jpg">
+											<div class="thmb_cntnt">
+												<ul class="tag mb0">
+													<li class="list-inline-item"><a href="#">For Rent</a></li>
+													<li class="list-inline-item"><a href="#">Featured</a></li>
+												</ul>
+												<a class="fp_price" href="#">$13,000<small>/mo</small></a>
+												<h4 class="posr color-white">Renovated Apartment</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="item">
+									<div class="feat_property home7">
+										<div class="thumb">
+											<img class="img-whp" src='{% static "images/property/fp5.jpg" %}' alt="fp5.jpg">
+											<div class="thmb_cntnt">
+												<ul class="tag mb0">
+													<li class="list-inline-item"><a href="#">For Rent</a></li>
+													<li class="list-inline-item"><a href="#">Featured</a></li>
+												</ul>
+												<a class="fp_price" href="#">$13,000<small>/mo</small></a>
+												<h4 class="posr color-white">Renovated Apartment</h4>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+
+
+						<div class="terms_condition_widget">
+							<h4 class="title">Категории объектов</h4>
+							<div class="widget_list">
+								<ul class="list_details">
+									<li><a href="#"><i class="fa fa-caret-right mr10"></i>Apartment <span class="float-right">6 properties</span></a></li>
+									<li><a href="#"><i class="fa fa-caret-right mr10"></i>Condo <span class="float-right">12 properties</span></a></li>
+									<li><a href="#"><i class="fa fa-caret-right mr10"></i>Family House <span class="float-right">8 properties</span></a></li>
+									<li><a href="#"><i class="fa fa-caret-right mr10"></i>Modern Villa <span class="float-right">26 properties</span></a></li>
+									<li><a href="#"><i class="fa fa-caret-right mr10"></i>Town House <span class="float-right">89 properties</span></a></li>
+								</ul>
+							</div>
+						</div>
+						<div class="sidebar_feature_listing">
+							<h4 class="title">Недавно Просмотренные</h4>
+							<div class="media">
+								<img class="align-self-start mr-3" src='{% static "images/blog/fls1.jpg" %}' alt="fls1.jpg">
+								<div class="media-body">
+							    	<h5 class="mt-0 post_title">Nice Room With View</h5>
+							    	<a href="#">$13,000/<small>/mo</small></a>
+							    	<ul class="mb0">
+							    		<li class="list-inline-item">Beds: 4</li>
+							    		<li class="list-inline-item">Baths: 2</li>
+							    		<li class="list-inline-item">Sq Ft: 5280</li>
+							    	</ul>
+								</div>
+							</div>
+							<div class="media">
+								<img class="align-self-start mr-3" src='{% static "images/blog/fls2.jpg" %}' alt="fls2.jpg">
+								<div class="media-body">
+							    	<h5 class="mt-0 post_title">Villa called Archangel</h5>
+							    	<a href="#">$13,000<small>/mo</small></a>
+							    	<ul class="mb0">
+							    		<li class="list-inline-item">Beds: 4</li>
+							    		<li class="list-inline-item">Baths: 2</li>
+							    		<li class="list-inline-item">Sq Ft: 5280</li>
+							    	</ul>
+								</div>
+							</div>
+							<div class="media">
+								<img class="align-self-start mr-3" src='{% static "images/blog/fls3.jpg" %}' alt="fls3.jpg">
+								<div class="media-body">
+							    	<h5 class="mt-0 post_title">Sunset Studio</h5>
+							    	<a href="#">$13,000<small>/mo</small></a>
+							    	<ul class="mb0">
+							    		<li class="list-inline-item">Beds: 4</li>
+							    		<li class="list-inline-item">Baths: 2</li>
+							    		<li class="list-inline-item">Sq Ft: 5280</li>
+							    	</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-12 col-lg-8">
+					<div class="row">
+						<div class="grid_list_search_result">
+							<div class="col-sm-12 col-md-4 col-lg-4 col-xl-5">
+								<div class="left_area tac-xsd">
+									<p>Найдено {{ count }} объявление</p>
+								</div>
+							</div>
+							<div class="col-sm-12 col-md-8 col-lg-8 col-xl-7">
+								<div class="right_area text-right tac-xsd">
+									<ul>
+										<li class="list-inline-item"><span class="stts">Status:</span>
+											<select class="selectpicker show-tick">
+												<option>All Status</option>
+												<option>Recent</option>
+												<option>Old Review</option>
+											</select>
+										</li>
+										<li class="list-inline-item"><span class="shrtby">Sort by:</span>
+											<select class="selectpicker show-tick">
+												<option>Featured First</option>
+												<option>Featured 2nd</option>
+												<option>Featured 3rd</option>
+												<option>Featured 4th</option>
+												<option>Featured 5th</option>
+											</select>
+										</li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+
+						{% for f in flatlist %}
+
+						<div class="col-lg-12">
+							<div class="feat_property list home7 style4">
+								<div class="thumb">
+									<div class="fp_single_item_slider">
+
+									{% for img in flatimges %}
+									{% if img.flat_id == f.id %}
+										<a href="/flat/{{f.id}}">
+										<div class="item">
+									<img class="img-whp" src='/media/{{ img.pik }}' alt="fp1.jpg">
+										</div>
+											</a>
+									{% endif %}
+									{% endfor %}
+									</div>
+									<div class="thmb_cntnt style3">
+										<ul class="icon mb0">
+											<li class="list-inline-item"><a href="/flat/{{f.id}}"><span class="flaticon-transfer-1"></span></a></li>
+											<li class="list-inline-item"><a href="/flat/{{f.id}}"><span class="flaticon-heart"></span></a></li>
+										</ul>
+									</div>
+
+
+								</div>
+								<div class="details">
+
+									<div class="tc_content">
+										<div class="dtls_headr">
+											<ul class="tag">
+												{% if f.issale %}
+												<li class="list-inline-item"><a href="/flat/{{f.id}}">Продажа</a></li>
+												{% endif %}
+												{% if f.isrent %}
+												<li class="list-inline-item"><a href="/flat/{{f.id}}">Аренда</a></li>
+												{% endif %}
+												{% if f.isdayly %}
+												<li class="list-inline-item"><a href="/flat/{{f.id}}">Посуточно</a></li>
+												{% endif %}
+												{% if f.isnew %}
+												<li class="list-inline-item"><a href="/flat/{{f.id}}">Новостройка</a></li>
+												{% else %}
+												<li class="list-inline-item"><a href="/flat/{{f.id}}">Вторичка</a></li>
+												{% endif %}
+											</ul>
+											{% if f.issale %}
+											<a class="fp_price price" href="/flat/{{f.id}}"><span class="price">{{f.price}}</span><small> ₽</small></a>
+											{% endif %}
+											{% if f.isrent %}
+											<a class="fp_price price" href="/flat/{{f.id}}"><span class="price">{{f.price}}</span><small> ₽/мес.</small></a>
+											{% endif %}
+											{% if f.isdayly %}
+											<a class="fp_price price" href="/flat/{{f.id}}"><span class="price">{{f.price}}</span><small> ₽/сут.</small></a>
+											{% endif %}
+
+										</div>
+										<a href="/flat/{{f.id}}">
+										<p class="text-thm">
+											<svg data-name="UndergroundIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 24" width="17" height=17">
+											<path data-name="UndergroundIcon" fill="#CF0000" fill-rule="evenodd" d="M11.154 4L8 9.53 4.845 4 1.1 13.466H0v1.428h5.657v-1.428H4.81l.824-2.36L8 15l2.365-3.893.824 2.36h-.85v1.427H16v-1.428h-1.1z"></path>
+											</svg>   {{f.metro}}</p>
+										<h4>{{f.roomtype}}</h4>
+										<p><span class="flaticon-placeholder"></span> {{f.city}}, {{f.address}}</p>
+										<ul class="prop_details mb0">
+											<li class="list-inline-item"><a href="/flat/{{f.id}}">Этаж: {{f.floor}}</a></li>
+											<li class="list-inline-item"><a href="/flat/{{f.id}}">Высота потолков: {{f.height}} м</a></li>
+											<li class="list-inline-item"><a href="/flat/{{f.id}}">Площадь: {{f.sqtotal}} м<sup>2</sup></a></li>
+										</ul>
+										</a>
+									</div>
+									<div class="fp_footer">
+										<ul class="fp_meta float-left mb0">
+											<li class="list-inline-item"><a href="#">Имя клиента</a></li>
+
+										</ul>
+										<div class="fp_pdate float-right">{{f.createdat}}</div>
+									</div>
+								</div>
+							</div>
+
+
+
+
+
+						</div>
+
+						{% endfor %}
+
+
+
+
+
+
+				</div>
+			</div>
+		</div>
+
+</section>
+
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+<script>
+$(document).ready(function(){
+	$('.freeplanradiolabel').click(function(){
+		let el = $(this);
+		$('[name=free_plan]').val(el.attr('data-value'));
+	});
+});
+
+$(document).ready(function(){
+	$('.freeplanradiolabel').click(function(){
+		let el = $(this);
+		$('[name=wc_type]').val(el.attr('data-value'));
+	});
+});
+
+$(document).ready(function(){
+	$('.freeplanradiolabel').click(function(){
+		let el = $(this);
+		$('[name=repair_type]').val(el.attr('data-value'));
+	});
+});
+
+$(document).ready(function(){
+	$('.freeplanradiolabel').click(function(){
+		let el = $(this);
+		$('[name=windows_view]').val(el.attr('data-value'));
+	});
+});
+
+$(document).ready(function(){
+	$('.freeplanradiolabel').click(function(){
+		let el = $(this);
+		$('[name=house_type]').val(el.attr('data-value'));
+	});
+});
+
+$(document).ready(function(){
+	$('.freeplanradiolabel').click(function(){
+		let el = $(this);
+		$('[name=lift_type]').val(el.attr('data-value'));
+	});
+});
+
+</script>
 {% endblock %}
