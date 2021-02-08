@@ -18,6 +18,9 @@ def index(request):
         'house_type': get_house_type(),
         'lift_type': get_lift_type(),
         'post': getpost(request),
+        'post_room_types': get_post_room_types(request),
+        'post_realty_types': get_post_realty_types(request),
+        'get_operation_types_list': get_operation_types_list(),
     }
     return render(request, 'flat/index.html', context)
 
@@ -37,6 +40,9 @@ def snyat_kvartiru(request):
         'house_type': get_house_type(),
         'lift_type': get_lift_type(),
         'post': getpost(request),
+        'post_room_types': get_post_room_types(request),
+        'post_realty_types': get_post_realty_types(request),
+        'get_operation_types_list': get_operation_types_list(),
     }
     return render(request, 'flat/index.html', context)
 
@@ -76,10 +82,13 @@ def search(request):
         q = q.filter(wctype_id__in=request.POST.getlist('wc_type'))
     # return HttpResponse(str(request.POST.getlist('free_plan[]')))
 
-    if 'balcony_type' in request.POST and len(request.POST.getlist('balcony_type'))>0:
+    if 'balcony_type' in request.POST and request.POST['balcony_type']==1:
         params = 1
-        q = q.filter(balcony_type_id__in=request.POST.getlist('balcony_type'))
-    # return HttpResponse(str(request.POST.getlist('free_plan[]')))
+        q = q.filter(balcony_id__gt=0)
+
+    if 'balcony_type' in request.POST and request.POST['balcony_type']==2:
+        params = 1
+        q = q.filter(loggia_id__gt=0)
 
     if 'repair_type' in request.POST and len(request.POST.getlist('repair_type'))>0:
         params = 1
@@ -99,6 +108,19 @@ def search(request):
     if 'lift_type' in request.POST and len(request.POST.getlist('lift_type'))>0:
         params = 1
         q = q.filter(lifttype_id__in=request.POST.getlist('lift_type'))
+    # return HttpResponse(str(request.POST.getlist('free_plan[]')))
+
+
+    if 'realty_type[]' in request.POST and len(request.POST.getlist('realty_type[]'))>0:
+        rt = request.POST.getlist('realty_type[]')
+        if '1' in rt and '2' not in rt:
+            params = 1
+            q = q.filter(isnew=1)
+
+        if '2' in rt and '1' not in rt:
+            params = 1
+            q = q.filter(isnew=0)
+
     # return HttpResponse(str(request.POST.getlist('free_plan[]')))
 
 
@@ -174,6 +196,9 @@ def search(request):
         'house_type': get_house_type(),
         'lift_type': get_lift_type(),
         'post': getpost(request),
+        'post_room_types': get_post_room_types(request),
+        'post_realty_types': get_post_realty_types(request),
+        'get_operation_types_list': get_operation_types_list(),
 
     }
     return render(request, 'flat/index.html', context)
@@ -184,7 +209,26 @@ def getpost(request):
         'price1': request.POST['price1'] if 'price1' in request.POST else "",
         'price2': request.POST['price2'] if 'price2' in request.POST else "",
         'operation_type': request.POST['operation_type'] if 'operation_type' in request.POST else "",
+        'owner': 1 if 'owner' in request.POST and '1' in request.POST['owner'] else 0,
+        'balcony_type': request.POST['balcony_type'] if 'balcony_type' in request.POST else "0"
+
     }
+
+
+def get_post_realty_types(request):
+    return list(map(int, request.POST.getlist('realty_type[]')))
+
+def get_post_room_types(request):
+    return list(map(int, request.POST.getlist('room_types[]')))
+
+
+def get_operation_types_list():
+    return {
+        "buy": "Купить",
+        "rent_month": "Снять",
+        "rent_day": "Посуточно"
+    }
+
 
 
 def get_room_types():

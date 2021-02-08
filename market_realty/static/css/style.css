@@ -16495,3 +16495,16 @@ input[name=lift_type]:checked+label{
   color:#ff5a5f;
 
 }
+
+
+label.balconytypelabel{
+  background-color: #ff5a5f;
+  color: #fff;
+
+}
+
+label.balconytypelabelchecked{
+  background-color: #fff;
+  color:#ff5a5f;
+
+}
